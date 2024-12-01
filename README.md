@@ -1,6 +1,8 @@
 # DiscordQuestCompleter
 Complete Discord Quests without doing a single thing!
-
+<details>
+	<summary>Click to expand code block</summary>
+	
 ```js
 let wpRequire;
 window.webpackChunkdiscord_app.push([
