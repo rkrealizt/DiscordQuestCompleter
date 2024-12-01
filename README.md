@@ -11,8 +11,6 @@ How to use this script:
 2. Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> to open DevTools
 3. Go to the `Console` tab
 4. Paste the following code and hit enter:
-<details>
-
 
 <details>
 	<summary>Click to expand code block</summary>
