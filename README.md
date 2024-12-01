@@ -1,5 +1,19 @@
-# DiscordQuestCompleter
-Complete Discord Quests without doing a single thing!
+## DiscordQuestCompleter
+
+> [!NOTE]
+> This does not works in browser for non-video quests! For stream/play quests use the desktop app!
+
+> [!NOTE]
+> When doing stream quests, you need at least 1 other account in the vc!
+
+How to use this script:
+1. Accept a quest under User Settings -> Gift Inventory
+2. Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> to open DevTools
+3. Go to the `Console` tab
+4. Paste the following code and hit enter:
+<details>
+
+
 <details>
 	<summary>Click to expand code block</summary>
 	
@@ -195,3 +209,32 @@ if (!quest) {
   }
 }
 ```
+</details>
+
+5. Follow the instructions displayed in the console based on your quest type:  
+   - If the quest requires you to **play** a game, simply wait and let the process complete automatically.  
+   - If the quest requires you to **stream** a game, join a voice channel with a friend or an alternate account and stream any window.  
+
+7. Wait for approximately **15 minutes**.  
+
+8. Once completed, go to **User Settings → Gift Inventory** to claim your reward!  
+
+You can monitor your progress in two ways:  
+- Check the `Quest progress:` messages printed in the **Console tab**.  
+- Refresh the **Gift Inventory** tab in settings to see updates.
+
+## FAQ
+
+**Q: Ctrl + Shift + I doesn't work**  
+**A:** You can try one of the following options:  
+- Download the [PTB client](https://discord.com/api/downloads/distributions/app/installers/latest?channel=ptb&platform=win&arch=x64).  
+- Use [this guide](https://www.reddit.com/r/discordapp/comments/sc61n3/comment/hu4fw5x/) to enable DevTools on the stable version of Discord.  
+
+---
+
+**Q: I get an error saying "Unauthorized"**  
+**A:** Discord has updated their platform, preventing this script from working in browsers. To fix this:  
+- Use the **Discord desktop app** instead.  
+- Alternatively, find an extension that allows you to modify your User-Agent and include the string `Electron/` in it.  
+
+Additionally, Discord now checks the number of participants in a voice channel. Make sure to have at least **one other account** in the voice channel with you.
