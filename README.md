@@ -34,9 +34,12 @@ let RunningGameStore = Object.values(wpRequire.c).find(
 let QuestsStore = Object.values(wpRequire.c).find(
   (x) => x?.exports?.Z?.getQuest,
 ).exports.Z;
-let ExperimentStore = Object.values(wpRequire.c).find(
-  (x) => x?.exports?.Z?.getGuildExperiments,
+let ChannelStore = Object.values(wpRequire.c).find(
+  (x) => x?.exports?.Z?.getAllThreadsForParent,
 ).exports.Z;
+let GuildChannelStore = Object.values(wpRequire.c).find(
+  (x) => x?.exports?.ZP?.getSFWDefaultChannel,
+).exports.ZP;
 let FluxDispatcher = Object.values(wpRequire.c).find(
   (x) => x?.exports?.Z?.flushWaitQueue,
 ).exports.Z;
@@ -58,9 +61,12 @@ if (!quest) {
 
   const applicationId = quest.config.application.id;
   const applicationName = quest.config.application.name;
-  const taskName = ["WATCH_VIDEO", "PLAY_ON_DESKTOP", "STREAM_ON_DESKTOP"].find(
-    (x) => quest.config.taskConfig.tasks[x] != null,
-  );
+  const taskName = [
+    "WATCH_VIDEO",
+    "PLAY_ON_DESKTOP",
+    "STREAM_ON_DESKTOP",
+    "PLAY_ACTIVITY",
+  ].find((x) => quest.config.taskConfig.tasks[x] != null);
   const secondsNeeded = quest.config.taskConfig.tasks[taskName].target;
   const secondsDone = quest.userStatus?.progress?.[taskName]?.value ?? 0;
 
@@ -204,6 +210,44 @@ if (!quest) {
     console.log(
       "Remember that you need at least 1 other person to be in the vc!",
     );
+  } else if (taskName === "PLAY_ACTIVITY") {
+    const channelId =
+      ChannelStore.getSortedPrivateChannels()[0]?.id ??
+      Object.values(GuildChannelStore.getAllGuilds()).find(
+        (x) => x != null && x.VOCAL.length > 0,
+      ).VOCAL[0].channel.id;
+    const streamKey = `call:${channelId}:1`;
+
+    let fn = async () => {
+      console.log(
+        "Completing quest",
+        applicationName,
+        "-",
+        quest.config.messages.questName,
+      );
+
+      while (true) {
+        const res = await api.post({
+          url: `/quests/${quest.id}/heartbeat`,
+          body: { stream_key: streamKey, terminal: false },
+        });
+        const progress = res.body.progress.PLAY_ACTIVITY.value;
+        console.log(`Quest progress: ${progress}/${secondsNeeded}`);
+
+        await new Promise((resolve) => setTimeout(resolve, 20 * 1000));
+
+        if (progress >= secondsNeeded) {
+          await api.post({
+            url: `/quests/${quest.id}/heartbeat`,
+            body: { stream_key: streamKey, terminal: true },
+          });
+          break;
+        }
+      }
+
+      console.log("Quest completed!");
+    };
+    fn();
   }
 }
 ```
